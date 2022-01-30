@@ -25,7 +25,22 @@ class Tertis:
 					screen.blit(self.orange_img, pos)
 				elif self.droppingBlocks[i][j] == 6 or self.settleBlocks[i][j] == 6:
 					screen.blit(self.yellow_img, pos)
-				
+	def checkFullRow(self,rowNo):
+		for i in range(self.totalcolumn):
+			if self.settleBlocks[i][rowNo] == 0:
+				return False
+		return True
+
+	def cleanRow(self):
+		newblocks = [[0 for i in range(self.totalrow)] for j in range(self.totalcolumn)]
+		k = self.totalrow-1
+		for j in range(self.totalrow-1,-1,-1):
+			if not self.checkFullRow(j):
+				for i in range (self.totalcolumn):
+					newblocks[i][k] = self.settleBlocks[i][j]
+				k-=1
+			
+		self.settleBlocks = newblocks	
 
 	def checkOverlap(self,blocks):
 		for i in range(self.totalcolumn):
@@ -55,6 +70,11 @@ class Tertis:
 			self.settle()
 		else:
 			self.droppingBlocks = newblocks
+
+	def fillFull(self):
+		for j in range(self.totalrow-1,self.totalrow-3,-1):
+			for i in range(self.totalcolumn):
+				self.settleBlocks[i][j] = 1
 
 	def leftBlock(self):
 		newblocks = [[0 for i in range(self.totalrow)] for j in range(self.totalcolumn)]
@@ -291,7 +311,7 @@ class Tertis:
 
 		self.droppingBlocks = [[0 for i in range(self.totalrow)] for j in range(self.totalcolumn)]
 		self.settleBlocks = [[0 for i in range(self.totalrow)] for j in range(self.totalcolumn)]
-
+		
 tertris = Tertis(500,700)
 
 pygame.display.set_caption("Tertris")
@@ -315,6 +335,7 @@ while True:
 		tertris.dropBlock()
 		tertris.addBlockIfNone()
 		tertris.drawBlock(screen)
+		tertris.cleanRow()
 		tertris.drawScore(screen,font)
 		if tertris.checkOverlap(tertris.droppingBlocks):
 			gameover = True
@@ -336,3 +357,5 @@ while True:
 				tertris.rightBlock()
 			elif event.key == pygame.K_UP:
 				tertris.rotateBlock()	
+		elif event.type == pygame.MOUSEBUTTONUP:
+			tertris.fillFull()
