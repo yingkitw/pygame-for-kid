@@ -31,14 +31,10 @@ def uncover():
 	for i in range(total_row):
 		for j in range(total_column):
 			if mine[i][j] == 1 and answer[i][j] == 0:
-				found = uncover_empty(i-1,j-1) \
-				and uncover_empty(i-1,j) \
-				and uncover_empty(i-1,j+1) \
+				found = uncover_empty(i-1,j) \
 				and uncover_empty(i,j-1) \
 				and uncover_empty(i,j+1) \
-				and uncover_empty(i+1,j-1) \
-				and uncover_empty(i+1,j) \
-				and uncover_empty(i+1,j+1)
+				and uncover_empty(i+1,j)
 				if found:
 					uncover()
 
@@ -87,7 +83,7 @@ hint = []
 gameover = False
 mark = [[0 for i in range(total_column)] for j in range(total_row)]
 mine = [[0 for i in range(total_column)] for j in range(total_row)]
-answer = [[random.randint(0,5) >= 4 for i in range(total_column)] for j in range(total_row)]
+answer = [[random.randint(0,8) >= 7 for i in range(total_column)] for j in range(total_row)]
 hint = [[0 for i in range(total_column)] for j in range(total_row)]
 for i in range(total_row):
 	for j in range(total_column):
