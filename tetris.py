@@ -1,6 +1,6 @@
 import sys, random, pygame, numpy
 
-class Tertis:
+class Tetis:
 	def drawScore(self,screen,font):
 		img = font.render(f"{self.score}",True,(255,0,0))
 		screen.blit(img,
@@ -292,6 +292,7 @@ class Tertis:
 	red_img = None
 	orange_img = None
 	yellow_img = None
+	gameover = False
 
 	def __init__(self,width,height):
 		pygame.init()
@@ -307,44 +308,45 @@ class Tertis:
 		self.red_img = pygame.transform.scale(pygame.image.load("rc/redblock.png"),(self.blockwidth,self.blockwidth))
 		self.orange_img = pygame.transform.scale(pygame.image.load("rc/orangeblock.png"),(self.blockwidth,self.blockwidth))
 		self.yellow_img = pygame.transform.scale(pygame.image.load("rc/yellowblock.png"),(self.blockwidth,self.blockwidth))
-		
-
+	
+	def init(self):
+		gameover = False
 		self.droppingBlocks = [[0 for i in range(self.totalrow)] for j in range(self.totalcolumn)]
 		self.settleBlocks = [[0 for i in range(self.totalrow)] for j in range(self.totalcolumn)]
-		
-tertris = Tertis(500,700)
+		self.addBlockIfNone()
 
-pygame.display.set_caption("Tertris")
+tetris = Tetis(500,700)
+
+pygame.display.set_caption("Tetris")
 screen = pygame.display.set_mode((500,700))
 
 font = pygame.font.Font(None,30)
 
 gameover_img = pygame.transform.scale(pygame.image.load("rc/gameover.png"),(screen.get_width()/2,screen.get_height()/2))
 background_img = pygame.transform.scale(pygame.image.load("rc/russia.png"),(screen.get_width(),screen.get_height()))
-tertris.addBlockIfNone()
 
-gameover = False
+tetris.init()
 
 while True:
 	t1=pygame.time.wait(25)
-	tertris.score += 1
+	tetris.score += 1
 
 	# screen.fill((0,0,0))
 	screen.blit(background_img,(0,0))
-	if not gameover:
-		tertris.dropBlock()
-		tertris.addBlockIfNone()
-		tertris.drawBlock(screen)
-		tertris.cleanRow()
-		tertris.drawScore(screen,font)
-		if tertris.checkOverlap(tertris.droppingBlocks):
-			gameover = True
+	if not tetris.gameover:
+		tetris.dropBlock()
+		tetris.addBlockIfNone()
+		tetris.drawBlock(screen)
+		tetris.cleanRow()
+		tetris.drawScore(screen,font)
+		if tetris.checkOverlap(tetris.droppingBlocks):
+			tetris.gameover = True
 	else:
-		tertris.drawBlock(screen)
-		tertris.drawScore(screen,font)
-		# screen.blit(gameover_img,
-		# ((screen.get_width()-gameover_img.get_width())/2,
-		# (screen.get_height()-gameover_img.get_height())/2))
+		tetris.drawBlock(screen)
+		tetris.drawScore(screen,font)
+		screen.blit(gameover_img,
+			((screen.get_width()-gameover_img.get_width())/2,
+			(screen.get_height()-gameover_img.get_height())/2))
 
 	pygame.display.update()
 	for event in pygame.event.get():
@@ -352,10 +354,14 @@ while True:
 			sys.exit()
 		elif event.type == pygame.KEYUP:
 			if event.key == pygame.K_LEFT:
-				tertris.leftBlock()
+				tetris.leftBlock()
 			elif event.key == pygame.K_RIGHT:
-				tertris.rightBlock()
+				tetris.rightBlock()
 			elif event.key == pygame.K_UP:
-				tertris.rotateBlock()	
+				tetris.rotateBlock()	
 		elif event.type == pygame.MOUSEBUTTONUP:
-			tertris.fillFull()
+			if tetris.gameover:
+				tetris.gameover = False
+				tetris.init()
+			else:
+				tetris.fillFull()
