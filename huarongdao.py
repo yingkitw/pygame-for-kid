@@ -1,3 +1,4 @@
+from email.headerregistry import Group
 import sys, random, pygame
 
 pygame.init()
@@ -22,13 +23,106 @@ block1x1_2 = 8
 block1x1_3 = 9
 block1x1_4 = 10
 
+class Block2x2(pygame.sprite.Sprite):
+	def __init__(self,x,y):
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.transform.scale(pygame.image.load("rc/block2x2.png"),(200,200))
+		self.rect = pygame.Rect((x,y),(200,200))
+
+	def update(self, screen):
+	    screen.blit(self.image, self.rect)
+
+class Block1x2_1(pygame.sprite.Sprite):
+	def __init__(self,x,y):
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.transform.scale(pygame.image.load("rc/block1x2_1.png"),(100,200))
+		self.rect = pygame.Rect((x,y),(100,200))
+
+	def update(self, screen):
+	    screen.blit(self.image, self.rect)
+
+class Block1x2_2(pygame.sprite.Sprite):
+	def __init__(self,x,y):
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.transform.scale(pygame.image.load("rc/block1x2_2.png"),(100,200))
+		self.rect = pygame.Rect((x,y),(100,200))
+
+	def update(self, screen):
+	    screen.blit(self.image, self.rect)
+
+class Block1x2_3(pygame.sprite.Sprite):
+	def __init__(self,x,y):
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.transform.scale(pygame.image.load("rc/block1x2_3.png"),(100,200))
+		self.rect = pygame.Rect((x,y),(100,200))
+
+	def update(self, screen):
+	    screen.blit(self.image, self.rect)
+
+class Block1x2_4(pygame.sprite.Sprite):
+	def __init__(self,x,y):
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.transform.scale(pygame.image.load("rc/block1x2_4.png"),(100,200))
+		self.rect = pygame.Rect((x,y),(100,200))
+
+	def update(self, screen):
+	    screen.blit(self.image, self.rect)
+
+class Block2x1(pygame.sprite.Sprite):
+	def __init__(self,x,y):
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.transform.scale(pygame.image.load("rc/block2x1.png"),(200,100))
+		self.rect = pygame.Rect((x,y),(200,100))
+
+	def update(self, screen):
+	    screen.blit(self.image, self.rect)
+
+class Block1x1(pygame.sprite.Sprite):
+	def __init__(self,x,y):
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.transform.scale(pygame.image.load("rc/block1x1.png"),(100,100))
+		self.rect = pygame.Rect((x,y),(100,100))
+
+	def update(self, screen):
+	    screen.blit(self.image, self.rect)
+
+def locateBlock(x,y):
+	return x // 100, y // 100
+
+def updateBoard(x,y):
+	# if board[y][x] == block2x2:
+	# 	if board[y-1][x] == 0:
+	# 	board[y-1][x] 
+	pass
+
 def drawBoard():
-	for i in range(4):
-		for j in range(4):
-			screen.blit(block_img_map[board[j][i]],(j*100,i*100))
+	screen.fill((255,255,255))
+	grp.update(screen)
+
+
+	# done = []
+	# for i in range(5):
+	# 	for j in range(4):
+	# 		if board[i][j] > 0 and board[i][j] not in done:
+	# 			screen.blit(block_img_map[board[i][j]],(j*100,i*100))
+	# 			done.append(board[i][j])
+	# 		else:
+	# 			pass
 
 pygame.display.set_caption("华容道")
 screen = pygame.display.set_mode((400,500))
+
+grp = pygame.sprite.Group()
+grp.add(Block2x2(100,0))
+grp.add(Block1x2_1(0,0))
+grp.add(Block1x2_2(300,0))
+grp.add(Block1x2_3(0,200))
+grp.add(Block1x2_4(300,200))
+grp.add(Block2x1(100,200))
+grp.add(Block1x1(0,400))
+grp.add(Block1x1(300,400))
+grp.add(Block1x1(100,300))
+grp.add(Block1x1(200,300))
 
 block2x2_img = pygame.transform.scale(pygame.image.load("rc/block2x2.png"),(200,200))
 block1x2_1_img = pygame.transform.scale(pygame.image.load("rc/block1x2_1.png"),(100,200))
@@ -57,4 +151,21 @@ while True:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			sys.exit()
+		elif event.type == pygame.MOUSEBUTTONUP:
+			x, y = pygame.mouse.get_pos()
+			
+			for sprite in grp:
+				if sprite.rect.collidepoint(x,y):
+					rx, ry = pygame.mouse.get_rel()
+					print(rx,",",ry)
+					if abs(rx) > abs(ry):
+						if rx > 0:
+							sprite.rect.x += 100
+						else:
+							sprite.rect.x -= 100
+					else:
+						if ry > 0:
+							sprite.rect.y += 100
+						else:
+							sprite.rect.y -= 100
 		
