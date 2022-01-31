@@ -12,9 +12,12 @@ pygame is impressively easy to pickup, that I successfully create minesweeper an
 
 # python tutorials
 
-1) guess
-2) print input
-3) say something
-4) calc
-5) and or
-6) show mario
+1) hello world
+2) do math
+3) def practice
+4) guess
+5) print input
+6) say something
+7) calc
+8) and or
+9) show mario
