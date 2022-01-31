@@ -1,3 +1,4 @@
+from cmath import rect
 from email.headerregistry import Group
 import sys, random, pygame
 
@@ -86,8 +87,43 @@ class Block1x1(pygame.sprite.Sprite):
 	def update(self, screen):
 	    screen.blit(self.image, self.rect)
 
-def locateBlock(x,y):
-	return x // 100, y // 100
+def checkCollid(block):
+	if block.rect.x < 0 \
+	or block.rect.y < 0 \
+	or block.rect.x >= 400 \
+	or block.rect.y >= 500:
+		return True
+
+	for other in grp:
+		if other != block \
+		and block.rect.colliderect(other.rect):
+			return True
+	return False
+
+def moveBlock(block):
+	block.rect.x -= 100
+	if not checkCollid(block):
+		return
+	else:
+		block.rect.x += 100
+
+	block.rect.x += 100	
+	if not checkCollid(block):
+		return
+	else:
+		block.rect.x -= 100
+
+	block.rect.y -= 100
+	if not checkCollid(block):
+		return
+	else:
+		block.rect.y += 100
+
+	block.rect.y += 100	
+	if not checkCollid(block):
+		return
+	else:
+		block.rect.y -= 100
 
 def updateBoard(x,y):
 	# if board[y][x] == block2x2:
@@ -154,18 +190,7 @@ while True:
 		elif event.type == pygame.MOUSEBUTTONUP:
 			x, y = pygame.mouse.get_pos()
 			
-			for sprite in grp:
-				if sprite.rect.collidepoint(x,y):
-					rx, ry = pygame.mouse.get_rel()
-					print(rx,",",ry)
-					if abs(rx) > abs(ry):
-						if rx > 0:
-							sprite.rect.x += 100
-						else:
-							sprite.rect.x -= 100
-					else:
-						if ry > 0:
-							sprite.rect.y += 100
-						else:
-							sprite.rect.y -= 100
+			for block in grp:
+				if block.rect.collidepoint(x,y):
+					moveBlock(block)
 		

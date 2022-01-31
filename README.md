@@ -21,3 +21,4 @@ pygame is impressively easy to pickup, that I successfully create minesweeper an
 7) calc
 8) and or
 9) show mario
+10) use sprite
