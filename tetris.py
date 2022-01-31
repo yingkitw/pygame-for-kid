@@ -1,6 +1,6 @@
 import sys, random, pygame, numpy
 
-class Tetis:
+class Tetris:
 	def drawScore(self,screen,font):
 		img = font.render(f"{self.score}",True,(255,0,0))
 		screen.blit(img,
@@ -315,7 +315,7 @@ class Tetis:
 		self.settleBlocks = [[0 for i in range(self.totalrow)] for j in range(self.totalcolumn)]
 		self.addBlockIfNone()
 
-tetris = Tetis(500,700)
+tetris = Tetris(500,700)
 
 pygame.display.set_caption("Tetris")
 screen = pygame.display.set_mode((500,700))
