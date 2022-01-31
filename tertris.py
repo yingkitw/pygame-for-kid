@@ -301,12 +301,12 @@ class Tertis:
 		self.totalrow = height//self.blockwidth
 		self.totalcolumn = width//self.blockwidth
 
-		self.purple_img = pygame.transform.scale(pygame.image.load("purpleblock.png"),(self.blockwidth,self.blockwidth))
-		self.green_img = pygame.transform.scale(pygame.image.load("greenblock.png"),(self.blockwidth,self.blockwidth))
-		self.blue_img = pygame.transform.scale(pygame.image.load("blueblock.png"),(self.blockwidth,self.blockwidth))
-		self.red_img = pygame.transform.scale(pygame.image.load("redblock.png"),(self.blockwidth,self.blockwidth))
-		self.orange_img = pygame.transform.scale(pygame.image.load("orangeblock.png"),(self.blockwidth,self.blockwidth))
-		self.yellow_img = pygame.transform.scale(pygame.image.load("yellowblock.png"),(self.blockwidth,self.blockwidth))
+		self.purple_img = pygame.transform.scale(pygame.image.load("rc/purpleblock.png"),(self.blockwidth,self.blockwidth))
+		self.green_img = pygame.transform.scale(pygame.image.load("rc/greenblock.png"),(self.blockwidth,self.blockwidth))
+		self.blue_img = pygame.transform.scale(pygame.image.load("rc/blueblock.png"),(self.blockwidth,self.blockwidth))
+		self.red_img = pygame.transform.scale(pygame.image.load("rc/redblock.png"),(self.blockwidth,self.blockwidth))
+		self.orange_img = pygame.transform.scale(pygame.image.load("rc/orangeblock.png"),(self.blockwidth,self.blockwidth))
+		self.yellow_img = pygame.transform.scale(pygame.image.load("rc/yellowblock.png"),(self.blockwidth,self.blockwidth))
 		
 
 		self.droppingBlocks = [[0 for i in range(self.totalrow)] for j in range(self.totalcolumn)]
@@ -319,8 +319,8 @@ screen = pygame.display.set_mode((500,700))
 
 font = pygame.font.Font(None,30)
 
-gameover_img = pygame.transform.scale(pygame.image.load("gameover.png"),(screen.get_width()/2,screen.get_height()/2))
-background_img = pygame.transform.scale(pygame.image.load("russia.png"),(screen.get_width(),screen.get_height()))
+gameover_img = pygame.transform.scale(pygame.image.load("rc/gameover.png"),(screen.get_width()/2,screen.get_height()/2))
+background_img = pygame.transform.scale(pygame.image.load("rc/russia.png"),(screen.get_width(),screen.get_height()))
 tertris.addBlockIfNone()
 
 gameover = False
