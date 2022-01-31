@@ -1,4 +1,4 @@
-import sys, random, pygame
+import sys, random, pygame, numpy
 
 class Tertis:
 	def drawScore(self,screen,font):
