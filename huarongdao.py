@@ -88,10 +88,12 @@ class Block1x1(pygame.sprite.Sprite):
 	    screen.blit(self.image, self.rect)
 
 def checkCollid(block):
-	if block.rect.x < 0 \
-	or block.rect.y < 0 \
-	or block.rect.x >= 400 \
-	or block.rect.y >= 500:
+	print(f"right:{block.rect.right},bottom:{block.rect.bottom}")
+
+	if block.rect.left < 0 \
+	or block.rect.top < 0 \
+	or block.rect.right > 400 \
+	or block.rect.bottom > 500:
 		return True
 
 	for other in grp:
@@ -103,24 +105,44 @@ def checkCollid(block):
 def moveBlock(block):
 	block.rect.x -= 100
 	if not checkCollid(block):
+		block.rect.x -= 100
+		if not checkCollid(block):
+			return
+		else:
+			block.rect.x += 100
 		return
 	else:
 		block.rect.x += 100
 
 	block.rect.x += 100	
 	if not checkCollid(block):
+		block.rect.x += 100
+		if not checkCollid(block):
+			return
+		else:
+			block.rect.x -= 100
 		return
 	else:
 		block.rect.x -= 100
 
 	block.rect.y -= 100
 	if not checkCollid(block):
+		block.rect.y -= 100
+		if not checkCollid(block):
+			return
+		else:
+			block.rect.y += 100
 		return
 	else:
 		block.rect.y += 100
 
 	block.rect.y += 100	
 	if not checkCollid(block):
+		block.rect.y += 100
+		if not checkCollid(block):
+			return
+		else:
+			block.rect.y -= 100
 		return
 	else:
 		block.rect.y -= 100
