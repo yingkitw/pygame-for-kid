@@ -89,54 +89,69 @@ def checkCollid(block):
 			return True
 	return False
 
-def moveBlock(block):
-	block.rect.x -= 100
-	if not checkCollid(block):
+UP = 1
+LEFT = 2
+DOWN = 3
+RIGHT = 4
+
+def moveBlock(block,direction):
+	if direction == LEFT:
 		block.rect.x -= 100
 		if not checkCollid(block):
+			block.rect.x -= 100
+			if not checkCollid(block):
+				return
+			else:
+				block.rect.x += 100
 			return
 		else:
 			block.rect.x += 100
-		return
-	else:
-		block.rect.x += 100
-
-	block.rect.x += 100	
-	if not checkCollid(block):
-		block.rect.x += 100
+	elif direction == RIGHT:
+		block.rect.x += 100	
 		if not checkCollid(block):
+			block.rect.x += 100
+			if not checkCollid(block):
+				return
+			else:
+				block.rect.x -= 100
 			return
 		else:
 			block.rect.x -= 100
-		return
-	else:
-		block.rect.x -= 100
-
-	block.rect.y -= 100
-	if not checkCollid(block):
+	elif direction == UP:
 		block.rect.y -= 100
 		if not checkCollid(block):
+			block.rect.y -= 100
+			if not checkCollid(block):
+				return
+			else:
+				block.rect.y += 100
 			return
 		else:
 			block.rect.y += 100
-		return
-	else:
-		block.rect.y += 100
-
-	block.rect.y += 100	
-	if not checkCollid(block):
-		block.rect.y += 100
+	elif direction == DOWN:
+		block.rect.y += 100	
 		if not checkCollid(block):
+			block.rect.y += 100
+			if not checkCollid(block):
+				return
+			else:
+				block.rect.y -= 100
 			return
 		else:
 			block.rect.y -= 100
-		return
-	else:
-		block.rect.y -= 100
 
 def drawBoard():
 	screen.fill((255,255,255))
 	grp.update(screen)
+
+def checkWin():
+	for block in grp:
+		if block is Block2x2\
+		and block.rect.left == 100\
+		and block.rect.top == 300:
+			return True
+	return False	
+
 
 pygame.display.set_caption("华容道")
 screen = pygame.display.set_mode((400,500))
@@ -153,17 +168,35 @@ grp.add(Block1x1(300,400))
 grp.add(Block1x1(100,300))
 grp.add(Block1x1(200,300))
 
+currentBlock = None
+
+win_img = pygame.transform.scale(pygame.image.load("rc/win.png"),(200,200))
+
 while True:
 	drawBoard()
+	if checkWin():
+		screen.blit(win_img,(100,100))
 	pygame.display.update()
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			sys.exit()
-		elif event.type == pygame.MOUSEBUTTONUP:
-			x, y = pygame.mouse.get_pos()
-			
+		elif event.type == pygame.MOUSEBUTTONDOWN:
+			pygame.mouse.get_rel()
+			x, y = pygame.mouse.get_pos()	
 			for block in grp:
 				if block.rect.collidepoint(x,y):
-					moveBlock(block)
+					currentBlock = block
+		elif event.type == pygame.MOUSEBUTTONUP:
+			xdelta, ydelta = pygame.mouse.get_rel()
+			print(f"xdelta:{xdelta}")
+			if abs(xdelta) > abs(ydelta) and xdelta > 0:
+				moveBlock(currentBlock,RIGHT)
+			elif abs(xdelta) > abs(ydelta) and xdelta < 0:
+				moveBlock(currentBlock,LEFT)
+			elif abs(xdelta) < abs(ydelta) and ydelta > 0:
+				moveBlock(currentBlock,DOWN)
+			elif abs(xdelta) < abs(ydelta) and ydelta < 0:
+				moveBlock(currentBlock,UP)
+			currentBlock = None
 		
