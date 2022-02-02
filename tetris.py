@@ -7,6 +7,12 @@ class Tetris:
 		((screen.get_width()-img.get_width())/2,
 		50))
 
+	def drawGrid(self):
+		for i in range(self.totalcolumn):
+			for j in range(self.totalrow):	
+				pygame.draw.rect(screen, (255,255,255), 
+				(i*self.blockwidth,j*self.blockwidth,self.blockwidth,self.blockwidth), width=1)
+
 	def drawBlock(self,screen):
 		for i in range(self.totalcolumn):
 			for j in range(self.totalrow):
@@ -327,12 +333,15 @@ background_img = pygame.transform.scale(pygame.image.load("rc/russia.png"),(scre
 
 tetris.init()
 
+clock = pygame.time.Clock()
+
 while True:
-	t1=pygame.time.wait(25)
+	clock.tick(10)
+
 	tetris.score += 1
 
-	# screen.fill((0,0,0))
 	screen.blit(background_img,(0,0))
+	tetris.drawGrid()
 	if not tetris.gameover:
 		tetris.dropBlock()
 		tetris.addBlockIfNone()
@@ -349,6 +358,7 @@ while True:
 			(screen.get_height()-gameover_img.get_height())/2))
 
 	pygame.display.update()
+	
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			sys.exit()

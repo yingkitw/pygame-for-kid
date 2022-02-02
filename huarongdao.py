@@ -169,24 +169,35 @@ grp.add(Block1x1(100,300))
 grp.add(Block1x1(200,300))
 
 currentBlock = None
+relx = 0
+rely = 0
 
 win_img = pygame.transform.scale(pygame.image.load("rc/win.png"),(200,200))
 
+clock = pygame.time.Clock()
 while True:
+	clock.tick(10)
 	drawBoard()
 	if checkWin():
 		screen.blit(win_img,(100,100))
-	pygame.display.update()
+	# pygame.display.update()
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			sys.exit()
 		elif event.type == pygame.MOUSEBUTTONDOWN:
 			pygame.mouse.get_rel()
-			x, y = pygame.mouse.get_pos()	
+			x, y = pygame.mouse.get_pos()
+				
 			for block in grp:
 				if block.rect.collidepoint(x,y):
+					relx = x - block.rect.left
+					rely = y - block.rect.top
 					currentBlock = block
+		elif event.type == pygame.MOUSEMOTION:
+			if currentBlock != None and pygame.mouse.get_pressed():
+				x, y = pygame.mouse.get_pos()
+				screen.blit(currentBlock.image,(x-relx,y-rely))
 		elif event.type == pygame.MOUSEBUTTONUP:
 			xdelta, ydelta = pygame.mouse.get_rel()
 			print(f"xdelta:{xdelta}")
@@ -199,4 +210,6 @@ while True:
 			elif abs(xdelta) < abs(ydelta) and ydelta < 0:
 				moveBlock(currentBlock,UP)
 			currentBlock = None
+
+	pygame.display.update()
 		
