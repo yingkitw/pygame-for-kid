@@ -1,5 +1,7 @@
 import sys, random, pygame, numpy
 
+BLOCKWIDTH = 30
+
 class Tetris:
 	def drawScore(self,screen,font):
 		img = font.render(f"{self.score}",True,(255,0,0))
@@ -82,21 +84,45 @@ class Tetris:
 			for i in range(self.totalcolumn):
 				self.settleBlocks[i][j] = 1
 
+	def canLeft(self):
+		for i in range(self.totalcolumn):
+			for j in range(self.totalrow):
+				if self.droppingBlocks[i][j] > 0:
+					if i == 0:
+						return False
+					elif self.settleBlocks[i-1][j] > 0:
+						return False
+		return True
+
 	def leftBlock(self):
+		if not self.canLeft():
+			return
 		newblocks = [[0 for i in range(self.totalrow)] for j in range(self.totalcolumn)]
 		for i in range(self.totalcolumn):
 			for j in range(self.totalrow):
-				if self.droppingBlocks[i][j] > 0\
-				and i>=0 and (i+1)<self.totalcolumn:
+				if self.droppingBlocks[i][j] > 0:
 					newblocks[i-1][j] = self.droppingBlocks[i][j]
+
 		self.droppingBlocks = newblocks 
 
+	def canRight(self):
+		for i in range(self.totalcolumn):
+			for j in range(self.totalrow):
+				if self.droppingBlocks[i][j] > 0:
+					if (i+1) == self.totalcolumn:
+						return False
+					elif self.settleBlocks[i+1][j] > 0:
+						return False
+		return True
+
 	def rightBlock(self):
+		if not self.canRight():
+			return
+
 		newblocks = [[0 for i in range(self.totalrow)] for j in range(self.totalcolumn)]
 		for i in range(self.totalcolumn):
 			for j in range(self.totalrow):
-				if self.droppingBlocks[i][j] > 0 \
-				and i>=0 and (i+1)<self.totalcolumn:
+				if self.droppingBlocks[i][j] > 0:
 					newblocks[i+1][j] = self.droppingBlocks[i][j]
 		self.droppingBlocks = newblocks 
 
@@ -164,7 +190,7 @@ class Tetris:
 							newblocks[i][j] = 4
 							newblocks[i+1][j] = 4
 							newblocks[i][j+1] = 4
-							newblocks[i][j+1] = 4
+							newblocks[i][j+2] = 4
 							self.rotateCount = 1
 						elif self.rotateCount == 1:
 							newblocks[i][j] = 4
@@ -220,17 +246,16 @@ class Tetris:
 						#  XX
 						if self.rotateCount == 0:
 							newblocks[i+1][j] = 6
-							newblocks[i][j+1] = 6
 							newblocks[i+1][j+1] = 6
+							newblocks[i][j+1] = 6
 							newblocks[i][j+2] = 6
 							self.rotateCount = 1
-						elif self.rotateCount == 1:
-							newblocks[i][j] = 6
-							newblocks[i+1][j] = 6
+						else:
+							newblocks[i][j+1] = 6
 							newblocks[i+1][j+1] = 6
-							newblocks[i+1][j+2] = 6
+							newblocks[i+1][j] = 6
+							newblocks[i+2][j] = 6
 							self.rotateCount = 0
-					
 						self.droppingBlocks = newblocks
 						return
 
@@ -288,7 +313,7 @@ class Tetris:
 	blockType = 0
 	score = 0
 	blockwidth = 30
-	totalcolumn = 20
+	totalcolumn = 0
 	totalrow = 0
 	droppingBlocks = None
 	settleBlocks = None
@@ -333,10 +358,12 @@ background_img = pygame.transform.scale(pygame.image.load("rc/russia.png"),(scre
 
 tetris.init()
 
+# pygame.key.set_repeat(1)
+
 clock = pygame.time.Clock()
 
 while True:
-	clock.tick(10)
+	clock.tick(5)
 
 	tetris.score += 1
 
@@ -362,7 +389,7 @@ while True:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			sys.exit()
-		elif event.type == pygame.KEYUP:
+		elif event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_LEFT:
 				tetris.leftBlock()
 			elif event.key == pygame.K_RIGHT:
